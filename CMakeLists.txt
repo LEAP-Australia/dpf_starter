@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.21)
 
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_C_STANDARD 17)
 
 set(CMAKE_CXX_EXTENSIONS OFF)
@@ -11,8 +11,10 @@ set(ENABLE_DEVELOPER_MODE
 
 set(OPT_WARNINGS_AS_ERRORS_DEVELOPER_DEFAULT FALSE)
 
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
+
 include(FetchContent)
-FetchContent_Declare(_project_options URL https://github.com/aminya/project_options/archive/refs/tags/v0.26.3.zip)
+FetchContent_Declare(_project_options URL https://github.com/aminya/project_options/archive/refs/tags/v0.25.2.zip)
 FetchContent_MakeAvailable(_project_options)
 include(${_project_options_SOURCE_DIR}/Index.cmake)
 
@@ -50,14 +52,16 @@ add_library(myproject::project_warnings INTERFACE IMPORTED)
 
 find_package(fmt CONFIG REQUIRED)
 find_package(spdlog CONFIG REQUIRED)
+find_package(AnsysDPF)
 
 # Generic test that uses conan libs
-add_library(intro SHARED src/main.cpp)
+add_library(dpf.starter SHARED src/example_add.cpp)
 target_link_libraries(
-  intro
+  dpf.starter
+  PUBLIC Ansys::DPF
   PRIVATE fmt::fmt spdlog::spdlog)
 
-package_project(TARGETS intro project_options project_warnings)
+package_project(TARGETS dpf.starter)
 
 set(CPACK_PACKAGE_FILE_NAME
     "${CMAKE_PROJECT_NAME}-${CMAKE_PROJECT_VERSION}-${CMAKE_SYSTEM_NAME}-${CMAKE_BUILD_TYPE}-${CMAKE_CXX_COMPILER_ID}-${CMAKE_CXX_COMPILER_VERSION}"
