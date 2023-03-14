@@ -28,10 +28,11 @@ import Ans.DataProcessing as dpf
 mech_dpf.setExtAPI(ExtAPI)
 
 dpf.DataProcessingCore.LoadLibrary("leapaustralia", r"path\to\dpf.starter.dll", "LoadOperators")
+mech_dpf.safeLoadPlugin(r"path\to\dpf.starter.dll","dpf_starter_dll_cs",r"path\to\write\file")
 
-op = dpf.Operator("adder")
-op.Connect(0, (1,2,3))
-op.GetOutputAsInt(0)
+adder = dpf.operators.custom.adder()
+adder.inputs.vector.Connect([1,2,3,4])
+adder.outputs.getsum()
 ```
 
 ## License
